@@ -1,27 +1,27 @@
-import FeaturedArtisanCard from "../components/ArtisanCard";
+import ArtisanCard from "../components/ArtisanCard";
 
 export default function Accueil() {
   const artisansDuMois = [
     {
       id: 1,
-      nom: "Mont Blanc Électricité",
-      note: 4.5,
-      specialite: "Électricien",
-      localisation: "Chamonix",
-    },
-    {
-      id: 2,
-      nom: "Menuiserie des Alpes",
-      note: 4.7,
-      specialite: "Menuisier",
-      localisation: "Annecy",
-    },
-    {
-      id: 3,
-      nom: "Atelier du Goût",
-      note: 4.6,
-      specialite: "Traiteur",
+      nom: "Orville Salmons",
+      note: 5,
+      specialite: "Chauffagiste",
       localisation: "Evian",
+    },
+    {
+      id: 15,
+      nom: "Chocolaterie Labbé",
+      note: 4.8,
+      specialite: "Chocolatier",
+      localisation: "Lyon",
+    },
+    {
+      id: 14,
+      nom: "Au pain au chocolat",
+      note: 4.7,
+      specialite: "Boulanger",
+      localisation: "Montélimar",
     },
   ];
 
@@ -64,7 +64,7 @@ export default function Accueil() {
       <div className="row g-3">
         {artisansDuMois.map((a) => (
           <div className="col-12 col-md-4" key={a.id}>
-            <FeaturedArtisanCard {...a} />
+            <ArtisanCard {...a} />
           </div>
         ))}
       </div>

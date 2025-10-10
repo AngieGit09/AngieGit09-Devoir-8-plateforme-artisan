@@ -14,14 +14,14 @@ app.use(express.json());
 })();
 
 // Import des routes
-const accueilRoutes = require("./routes/accueil");
 const listeArtisanRoutes = require("./routes/listeArtisan");
+const accueilRoutes = require("./routes/accueil");
 const ficheArtisanRoutes = require("./routes/ficheArtisan");
 const notFoundRoutes = require("./routes/404");
 
 // Déclaration des routes
-app.use("/api/accueil", accueilRoutes);
 app.use("/api/liste-artisan", listeArtisanRoutes);
+app.use("/api/accueil", accueilRoutes);
 app.use("/api/fiche-artisan", ficheArtisanRoutes);
 
 // Route 404 error

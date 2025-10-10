@@ -1,5 +1,37 @@
+@import "bootstrap/scss/bootstrap";
+
+@import "./fonts";
+
+//Styles globaux
+
 body {
-  margin: 0;
-  font-family: system-ui, Arial, sans-serif;
-  background: #f6f8fb;
+  font-family: "Graphic Regular", sans-serif;
+  color: #384050;
+  background-color: #f1f8fc;
+}
+
+h1 {
+  font-family: "Graphic Medium";
+}
+
+//Styles du header
+.nav-loop-icon {
+  width: 22px;
+  height: 22px;
+  filter: invert(1);
+}
+
+.navbar-toggler-icon {
+  filter: invert(1);
+}
+
+.header-logo {
+  height: 120px;
+  width: auto;
+  display: block;
+}
+
+//Styles du footer
+footer {
+  text-align: center;
 }

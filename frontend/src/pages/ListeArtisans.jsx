@@ -1,33 +1,39 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import ArtisanCard from "../components/ArtisanCard";
+/** @typedef {import('../types').Artisan} Artisan */
 
 export default function ListeArtisans() {
+  /** @type {[Artisan[]|null, (v: Artisan[]|null)=>void]} */
   const [data, setData] = useState(null);
   const [err, setErr] = useState("");
 
   useEffect(() => {
-    console.log("[ListeArtisans] mounted, fetching…");
     api
       .get("/api/liste-artisan")
-      .then((res) => {
-        console.log("[ListeArtisans] response:", res);
-        setData(res.data);
-      })
-      .catch((e) => {
-        console.error("[ListeArtisans] error:", e);
-        setErr(e.message || "Erreur");
-      });
+      .then((res) => setData(res.data))
+      .catch((e) => setErr(e.message || "Erreur"));
   }, []);
 
-  if (err) return <p role="alert">Erreur : {err}</p>;
-  if (!data) return <p role="status">Chargement…</p>;
+  if (err)
+    return (
+      <p role="alert" className="container mt-4">
+        Erreur : {err}
+      </p>
+    );
+  if (!data)
+    return (
+      <p role="status" className="container mt-4">
+        Chargement…
+      </p>
+    );
 
   return (
-    <main>
-      <h1>Liste des artisans</h1>
-      <pre style={{ whiteSpace: "pre-wrap" }}>
-        {JSON.stringify(data, null, 2)}
-      </pre>
+    <main className="container my-4">
+      <h1 className="h3 mb-3">Liste des artisans</h1>
+      {data.map((a) => (
+        <ArtisanCard key={a.id} artisan={a} />
+      ))}
     </main>
   );
 }

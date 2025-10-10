@@ -1,8 +1,35 @@
-.app-container {
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
+@import "bootstrap/scss/bootstrap";
+
+//Import style globaux
+@import "./index.scss";
+
+//Styles
+.card {
+  border-radius: 1rem;
 }
-main {
-  flex: 1;
+
+//Page 4004 error
+.notfound {
+  padding: 2rem 1rem;
+  border-radius: 0.5rem;
+
+  .notfound-img {
+    max-width: 340px;
+    border-radius: 0.25rem;
+  }
+
+  .notfound-btn {
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+}
+
+//Artisan card (les 3 artisans du mois)
+.featured-artisan {
+  border-radius: 1rem;
+  .card-title {
+    font-weight: 600;
+  }
 }

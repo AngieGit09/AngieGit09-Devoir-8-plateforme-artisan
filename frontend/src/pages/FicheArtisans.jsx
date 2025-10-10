@@ -1,29 +1,23 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../services/api";
+/** @typedef {import('../types').Artisan} Artisan */
 
 export default function FicheArtisans() {
   const { id } = useParams();
+
+  /** @type {[Artisan|null, (v: Artisan|null)=>void]} */
   const [artisan, setArtisan] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setErr] = useState("");
 
   useEffect(() => {
-    let mounted = true;
-    async function fetchOne() {
-      try {
-        const res = await api.get(`/api/fiche-artisan/${id}`);
-        if (mounted) setArtisan(res.data);
-      } catch (e) {
-        if (mounted) setError("Artisan introuvable.");
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    }
-    fetchOne();
-    return () => {
-      mounted = false;
-    };
+    setLoading(true);
+    api
+      .get(`/api/artisan/${id}`)
+      .then((res) => setArtisan(res.data))
+      .catch((e) => setErr(e.message || "Erreur"))
+      .finally(() => setLoading(false));
   }, [id]);
 
   if (loading) return <p role="status">Chargement…</p>;
@@ -31,13 +25,16 @@ export default function FicheArtisans() {
   if (!artisan) return null;
 
   return (
-    <main>
-      <h1>{artisan.nom}</h1>
+    <main className="container my-4">
+      <h1 className="h4">{artisan.nom}</h1>
       <p>
         {artisan.specialite} — {artisan.localisation}
       </p>
-      <p>⭐ {Number(artisan.note_moyenne).toFixed(1)}</p>
-      {/* Ici le bloc "À propos", le site web, le formulaire de contact, etc. */}
+      <p>⭐ {Number(artisan.note_moyenne ?? 0).toFixed(1)} / 5</p>
+
+      <form className="mt-4">
+        <button className="btn btn-success">Envoyer</button>
+      </form>
     </main>
   );
 }

@@ -1,18 +1,39 @@
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-export default function ArtisanCard({ artisan }) {
-  const { id, nom, specialite, localisation, note_moyenne } = artisan;
+//artisan du mois
+export default function FeaturedArtisanCard({
+  id,
+  nom,
+  note = 0,
+  specialite,
+  localisation,
+}) {
+  const noteFmt = Number(note ?? 0).toFixed(1);
 
   return (
-    <article className="card" aria-labelledby={`art-${id}`}>
-      <h2 id={`art-${id}`}>{nom}</h2>
-      <p>
-        {specialite} — {localisation}
-      </p>
-      <p aria-label="note">⭐ {Number(note_moyenne ?? 0).toFixed(1)} / 5</p>
-      <Link to={`/fiche-artisan/${id}`} className="btn">
-        Voir la fiche
-      </Link>
+    <article className="featured-artisan bg-primary  text-white card text-center p-3 h-100">
+      <div className="card-body">
+        <h3 className="card-title h5 mb-2">{nom}</h3>
+        <p className="mb-1">⭐ {noteFmt} / 5</p>
+        <p className="text-white mb-3">
+          {specialite} — {localisation}
+        </p>
+        <Link
+          to={`/fiche-artisan/${id}`}
+          className="btn btn-success btn-sm rounded-pill"
+        >
+          Voir la fiche
+        </Link>
+      </div>
     </article>
   );
 }
+
+FeaturedArtisanCard.propTypes = {
+  id: PropTypes.number.isRequired,
+  nom: PropTypes.string.isRequired,
+  note: PropTypes.number,
+  specialite: PropTypes.string.isRequired,
+  localisation: PropTypes.string.isRequired,
+};

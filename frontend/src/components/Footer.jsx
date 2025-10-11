@@ -1,11 +1,14 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer className="mt-5 bg-primary text-white py-4">
       <div className="container">
         <div className="row gy-3">
+          {/* Bloc adresse */}
           <div className="col-md">
             <div className="fw-bold mb-2">Trouve ton artisan !</div>
-            <div>
+            <address className="mb-0">
               101 cours Charlemagne
               <br />
               CS 20033
@@ -13,22 +16,75 @@ export default function Footer() {
               69026 LYON CEDEX 02
               <br />
               +33 (0)4 26 73 40 00
-            </div>
+            </address>
+
+            <hr className="d-block d-md-none mx-auto my-5 border-2 border-white" />
           </div>
+
+          {/* Bloc pages légales */}
           <div className="col-md">
             <ul className="list-unstyled m-0">
-              <li>Mentions légales</li>
-              <li>Données personnelles</li>
-              <li>Accessibilité : partiellement conforme</li>
-              <li>Marchés publics</li>
+              <li>
+                <Link
+                  to="/mentions-legales"
+                  className="text-white text-decoration-none"
+                >
+                  Mentions légales
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/donnees-personnelles"
+                  className="text-white text-decoration-none"
+                >
+                  Données personnelles
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/accessibilite"
+                  className="text-white text-decoration-none"
+                >
+                  Accessibilité : partiellement conforme
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/marches-publics"
+                  className="text-white text-decoration-none"
+                >
+                  Marchés publics
+                </Link>
+              </li>
             </ul>
           </div>
+
+          {/* Bloc liens supplémentaires */}
           <div className="col-md">
             <ul className="list-unstyled m-0">
-              <li>Presse</li>
-              <li>Contact</li>
-              <li>Politique des cookies</li>
-              <li>Gestion des cookies</li>
+              <li>
+                <Link to="/presse" className="text-white text-decoration-none">
+                  Presse
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-white text-decoration-none">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link to="/cookies" className="text-white text-decoration-none">
+                  Politique des cookies
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/gestion-cookies"
+                  className="text-white text-decoration-none"
+                >
+                  Gestion des cookies
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

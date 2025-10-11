@@ -1,38 +1,31 @@
+import Seo from "../components/Seo";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../services/api";
 import Stars from "../components/Stars";
 
 export default function FicheArtisans() {
-  const { id: idParam } = useParams();
-  const id = Number(idParam || 0);
+  const { id } = useParams();
   const [artisan, setArtisan] = useState(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
-
-  // Formulaire
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [formErr, setFormErr] = useState(null);
 
   useEffect(() => {
-    let cancel = false;
     async function load() {
       try {
         setLoading(true);
-        setErr(null);
         const { data } = await api.get(`/api/fiche-artisan/${id}`);
-        if (!cancel) setArtisan(data);
-      } catch (e) {
-        if (!cancel) setErr("Impossible de charger la fiche artisan.");
+        setArtisan(data);
+      } catch {
+        setErr("Impossible de charger la fiche artisan.");
       } finally {
-        if (!cancel) setLoading(false);
+        setLoading(false);
       }
     }
     load();
-    return () => {
-      cancel = true;
-    };
   }, [id]);
 
   async function onSubmit(e) {
@@ -42,152 +35,199 @@ export default function FicheArtisans() {
     setSent(false);
 
     const payload = Object.fromEntries(new FormData(e.currentTarget).entries());
-    // attend : { nom, email, objet, message }
     try {
       await api.post(`/api/fiche-artisan/${id}/contact`, payload);
       setSent(true);
       e.currentTarget.reset();
-    } catch (e) {
+    } catch {
       setFormErr("Échec de l’envoi. Merci de réessayer.");
     } finally {
       setSending(false);
     }
   }
 
-  if (loading) return <main className="container py-4">Chargement…</main>;
+  if (loading) return;
+  <>
+    <Seo
+      title="Fiche artisan"
+      description="Contactez l'artisan que vous souhaitez."
+    />
+    <main className="container py-5">Chargement…</main>;
+  </>;
   if (err)
     return (
-      <main className="container py-4">
+      <main className="container py-5">
         <div className="alert alert-danger">{err}</div>
       </main>
     );
   if (!artisan) return null;
 
+  const imageUrl = artisan.image || "/assets/fallbacks/default.jpg";
+
   return (
-    <main className="container py-4">
-      <h1 className="h3 mb-3">Bienvenue sur la fiche de votre artisan</h1>
+    <main className="container py-5">
+      <h1 className="text-uppercase fw-medium">
+        Bienvenue sur la page de votre artisan :{artisan.nom}
+      </h1>
 
-      <div className="row g-4">
-        {/* Col gauche : image + infos */}
-        <div className="col-12 col-lg-6">
-          <div className="card border-0 shadow-sm">
-            {artisan.image && (
-              <img
-                src={artisan.image}
-                alt={artisan.nom}
-                className="card-img-top object-fit-cover"
-                style={{ maxHeight: 280 }}
-              />
-            )}
-            <div className="card-body">
-              <h2 className="h5 mb-1 text-center text-uppercase">
-                {artisan.nom}
-              </h2>
-
-              <div className="d-flex justify-content-center align-items-center gap-2 mt-1">
-                <Stars value={Number(artisan.note_moyenne || 0)} />
-                <span className="small">
-                  {Number(artisan.note_moyenne || 0).toFixed(1)}
-                </span>
-              </div>
-
-              <div className="text-center small text-secondary mt-1">
-                {artisan.specialite}
-              </div>
-              <div className="text-center small text-secondary">
-                {artisan.localisation}
-              </div>
-
-              <hr />
-
-              <h3 className="h6">À propos</h3>
-              <p className="mb-0">{artisan.description || "—"}</p>
-
-              {artisan.site_web && (
-                <p className="small mt-3 mb-0">
-                  Site web de votre artisan :{" "}
-                  <a href={artisan.site_web} target="_blank" rel="noreferrer">
-                    {artisan.site_web}
-                  </a>
-                </p>
-              )}
-            </div>
-          </div>
+      {/* SECTION PRINCIPALE */}
+      <div className="row g-4 align-items-center">
+        {/* IMAGE */}
+        <div className="col-12 col-lg-5 text-center">
+          <img
+            src={imageUrl}
+            alt={artisan.nom}
+            className="img-fluid rounded shadow-sm"
+            style={{ objectFit: "cover", maxHeight: "300px" }}
+          />
         </div>
 
-        {/* Col droite : formulaire de contact */}
-        <div className="col-12 col-lg-6">
+        {/* DESCRIPTION */}
+        <div className="col-12 col-lg-7">
+          <div className="text-lg-start text-center">
+            <h2 className="h5 fw-bold text-uppercase mb-2">
+              {artisan.specialite}
+            </h2>
+
+            <div className="d-flex justify-content-center justify-content-lg-start align-items-center gap-2 mb-2">
+              <Stars value={Number(artisan.note_moyenne || 0)} />
+              <span>{Number(artisan.note_moyenne || 0).toFixed(1)}</span>
+            </div>
+
+            <p className="text-muted mb-1">{artisan.localisation}</p>
+            <p className="mt-3">
+              {artisan.description ||
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent volutpat scelerisque mauris."}
+            </p>
+
+            {artisan.site_web && (
+              <p className="small mt-2">
+                <strong>Site web :</strong>{" "}
+                <a href={artisan.site_web} target="_blank" rel="noreferrer">
+                  {artisan.site_web}
+                </a>
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <hr className="mx-auto my-5 separator border-success border-3" />
+
+      <h2 className="h6 mb-4 text-center text-uppercase fw-bold">
+        Contactez {artisan.nom}
+      </h2>
+
+      {/* FORMULAIRE DE CONTACT */}
+      <div className="row justify-content-center mt-5">
+        <div className="col-12 col-md-10 col-lg-8">
           <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <h3 className="h6 mb-3">Contactez votre artisan :</h3>
+            <div className="card-body p-4">
+              <h3 className="h6 mb-4 text-center">
+                Formulaire de contact pour {artisan.nom}
+              </h3>
 
               {sent && (
-                <div className="alert alert-success py-2">
-                  Message envoyé. Réponse sous 48h.
+                <div className="alert alert-success text-center py-2">
+                  Message envoyé avec succès.
                 </div>
               )}
               {formErr && (
-                <div className="alert alert-danger py-2">{formErr}</div>
+                <div className="alert alert-danger text-center py-2">
+                  {formErr}
+                </div>
               )}
 
-              <form onSubmit={onSubmit} className="vstack gap-2">
-                <div className="row g-2">
-                  <div className="col">
-                    <label className="form-label small" htmlFor="nom">
-                      Nom
-                    </label>
+              <form onSubmit={onSubmit} className="vstack gap-3">
+                {/* Nom + Prénom */}
+                <div className="row g-3">
+                  <div className="col-md-6">
+                    <label htmlFor="nom">Nom</label>
                     <input
+                      type="text"
                       id="nom"
                       name="nom"
                       className="form-control"
+                      placeholder="Votre nom"
                       required
                     />
                   </div>
-                  <div className="col">
-                    <label className="form-label small" htmlFor="email">
-                      Email
-                    </label>
+                  <div className="col-md-6">
+                    <label htmlFor="prenom">Prénom</label>
                     <input
-                      id="email"
-                      name="email"
-                      type="email"
+                      type="text"
+                      id="prenom"
+                      name="prenom"
                       className="form-control"
+                      placeholder="Votre prénom"
                       required
                     />
                   </div>
                 </div>
 
+                {/* Téléphone + Email */}
+                <div className="row g-3">
+                  <div className="col-md-6">
+                    <label htmlFor="telephone">Téléphone</label>
+                    <input
+                      type="tel"
+                      id="telephone"
+                      name="telephone"
+                      className="form-control"
+                      placeholder="Ex : +33 6 12 34 56 78"
+                      pattern="^(\+33|0)[1-9](\\d{2}){4}$"
+                      required
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="email">Email</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      className="form-control"
+                      placeholder="Votre email"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Objet */}
                 <div>
-                  <label className="form-label small" htmlFor="objet">
-                    Objet
-                  </label>
+                  <label htmlFor="objet">Objet du message</label>
                   <input
+                    type="text"
                     id="objet"
                     name="objet"
                     className="form-control"
+                    placeholder="Objet"
                     required
                   />
                 </div>
 
+                {/* Message */}
                 <div>
-                  <label className="form-label small" htmlFor="message">
-                    Message
-                  </label>
+                  <label htmlFor="message">Message</label>
                   <textarea
                     id="message"
                     name="message"
                     rows="4"
                     className="form-control"
+                    placeholder="Votre message"
                     required
-                  />
+                  ></textarea>
                 </div>
 
-                <button
-                  className="btn btn-success align-self-start mt-2 rounded-pill px-4"
-                  disabled={sending}
-                >
-                  {sending ? "Envoi…" : "Envoyer"}
-                </button>
+                {/* Bouton d’envoi */}
+                <div className="text-center mt-3">
+                  <button
+                    type="submit"
+                    className="btn btn-success rounded-pill px-4"
+                    disabled={sending}
+                  >
+                    {sending ? "Envoi en cours…" : "Envoyer le message"}
+                  </button>
+                </div>
               </form>
             </div>
           </div>

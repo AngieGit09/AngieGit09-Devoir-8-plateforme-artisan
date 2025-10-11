@@ -1,30 +1,50 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
+
 const { sequelize, connectDB } = require("./models");
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://trouve-ton-artisan.netlify.app", //site depuis netfify
+];
 
-// Connexion à la base de données
-(async () => {
-  await connectDB();
-  await sequelize.sync({ alter: true });
-})();
+const corsOptions = {
+  origin: function (origin, cb) {
+    if (!origin) return cb(null, true);
+    if (allowedOrigins.includes(origin)) return cb(null, true);
+    return cb(new Error("Not allowed by CORS"), false);
+  },
+};
 
-// Import des routes
-const listeArtisanRoutes = require("./routes/listeArtisan");
+function checkApiKey(req, res, next) {
+  const key = req.headers["x-api-key"];
+  if (process.env.API_KEY && key === process.env.API_KEY) return next();
+  return res.status(403).json({ error: "Accès refusé : clé API invalide" });
+}
+
 const accueilRoutes = require("./routes/accueil");
+const listeArtisanRoutes = require("./routes/listeArtisan");
 const ficheArtisanRoutes = require("./routes/ficheArtisan");
 const notFoundRoutes = require("./routes/404");
 
-// Déclaration des routes
-app.use("/api/liste-artisan", listeArtisanRoutes);
+const app = express();
+
+app.use(cors(corsOptions));
+app.use(express.json());
+
+(async () => {
+  await connectDB();
+})();
+
+app.get("/healthz", (req, res) => res.json({ ok: true }));
+
+app.use("/api", checkApiKey);
+
 app.use("/api/accueil", accueilRoutes);
+app.use("/api/liste-artisan", listeArtisanRoutes);
 app.use("/api/fiche-artisan", ficheArtisanRoutes);
 
-// Route 404 error
 app.use(notFoundRoutes);
 
 module.exports = app;

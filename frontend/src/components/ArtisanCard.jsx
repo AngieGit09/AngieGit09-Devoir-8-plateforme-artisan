@@ -12,7 +12,7 @@ export default function FeaturedArtisanCard({
   const noteFmt = Number(note ?? 0).toFixed(1);
 
   return (
-    <article className="artisan bg-primary  text-white card text-center p-3 h-100">
+    <article className="artisan bg-success  text-white card text-center p-3 h-100">
       <div className="card-body">
         <h3 className="card-title h5 mb-2">{nom}</h3>
         <p className="mb-1">⭐ {noteFmt} / 5</p>
@@ -21,7 +21,7 @@ export default function FeaturedArtisanCard({
         </p>
         <Link
           to={`/fiche-artisan/${id}`}
-          className="btn btn-success btn-sm rounded-pill"
+          className="btn btn-primary btn-sm rounded-pill"
         >
           Voir la fiche
         </Link>

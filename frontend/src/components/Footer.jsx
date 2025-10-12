@@ -5,9 +5,15 @@ export default function Footer() {
     <footer className="mt-5 bg-primary text-white py-4">
       <div className="container">
         <div className="row gy-3">
+          <Link className="navbar-brand text-white" to="/">
+            <img
+              src="/assets/logo.png"
+              alt="Trouve ton artisan"
+              className="header-logo d-block mx-auto mb-2"
+            />
+          </Link>
           {/* Bloc adresse */}
           <div className="col-md">
-            <div className="fw-bold mb-2">Trouve ton artisan !</div>
             <address className="mb-0">
               101 cours Charlemagne
               <br />

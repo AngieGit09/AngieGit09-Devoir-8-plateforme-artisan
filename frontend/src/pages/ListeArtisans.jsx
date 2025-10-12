@@ -61,8 +61,7 @@ export default function ListeArtisans() {
         description="Trouvez votre artisan depuis la categorie que vous avez sélectionnez."
       />
       <main className="container py-4">
-        <h1 className="mb-1 text-center fw-medium">Liste des artisans</h1>
-        <p className="text-center text-muted mb-4">Catégorie : {label}</p>
+        <h1 className="text-uppercase fw-medium mb-4">Catégorie : {label}</h1>
 
         {loading && <div>Chargement…</div>}
         {err && <div className="alert alert-danger">{err}</div>}

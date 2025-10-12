@@ -19,7 +19,7 @@ export default function NotFound() {
         </div>
 
         {/* Titre */}
-        <h1 className="text-center h3 mb-3">Page non trouvée</h1>
+        <h1 className="text-uppercase fw-medium mb-4">Page non trouvée</h1>
 
         {/* Bouton retour */}
         <div className="text-center">

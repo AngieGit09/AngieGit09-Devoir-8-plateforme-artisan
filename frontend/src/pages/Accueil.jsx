@@ -35,7 +35,9 @@ export default function Accueil() {
 
       <main className="container my-5">
         {/* 1) Titre principal */}
-        <h1 className="mb-4 text-center">Comment trouver mon artisan</h1>
+        <h1 className="text-uppercase fw-medium mb-4">
+          Comment trouver mon artisan
+        </h1>
 
         {/* 2) Fonctionnement du site */}
         <h2 className="h4 mb-3">Fonctionnement du site</h2>

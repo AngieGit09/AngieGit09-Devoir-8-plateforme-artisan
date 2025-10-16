@@ -1,7 +1,10 @@
+// Import des composants SEO et de la carte artisan
 import Seo from "../components/Seo";
 import ArtisanCard from "../components/CardArtisanDuMois";
 
+// Page d’accueil du site
 export default function Accueil() {
+  // Tableau contenant les 3 artisans du mois (affichage temporaire en dur)
   const artisansDuMois = [
     {
       id: 1,
@@ -28,6 +31,7 @@ export default function Accueil() {
 
   return (
     <>
+      {/* Informations SEO pour la page d’accueil */}
       <Seo
         title="Trouve ton artisan – Accueil"
         description="Trouvez un artisan de confiance près de chez vous : bâtiment, services, fabrication, alimentation."
@@ -35,12 +39,12 @@ export default function Accueil() {
 
       <main className="container my-5">
         {/* 1) Titre principal */}
-        <h1 className="text-uppercase fw-medium mb-4">
+        <h1 className="text-uppercase text-center fw-medium mb-4">
           Comment trouver mon artisan
         </h1>
 
         {/* 2) Fonctionnement du site */}
-        <h2 className="h4 mb-3">Fonctionnement du site</h2>
+        <h2 className="h4 mb-3 fw-bold">Fonctionnement du site</h2>
         <ol className="list-unstyled ps-3 mb-4">
           <li className="mb-3">
             <strong>1. Choisir une catégorie d’artisans</strong>
@@ -71,7 +75,7 @@ export default function Accueil() {
         <hr className="mx-auto my-5 separator border-success border-3" />
 
         {/* Les 3 Artisans du mois */}
-        <h2 className="h4 mb-3 text-center">Les 3 artisans du mois</h2>
+        <h2 className="h4 mb-3 text-center fw-bold">Les 3 artisans du mois</h2>
         <div className="row g-3">
           {artisansDuMois.map((a) => (
             <div className="col-12 col-md-4" key={a.id}>

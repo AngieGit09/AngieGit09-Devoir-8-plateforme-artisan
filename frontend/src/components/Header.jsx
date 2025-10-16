@@ -1,10 +1,15 @@
 import { Link, NavLink } from "react-router-dom";
 
+/**
+ * Header global : logo à gauche, recherche/menu à droite.
+ * Utilise NavLink pour gérer l'état "actif" sur les liens de navigation.
+ */
+
 export default function Header() {
   return (
     <header className="bg-primary text-white">
       <nav className="navbar navbar-expand-lg container">
-        {/* Logo à gauche */}
+        {/* Logo (qui renvoi à la page d'accueil) à gauche */}
         <Link className="navbar-brand text-white" to="/">
           <img
             src="/assets/logo.png"

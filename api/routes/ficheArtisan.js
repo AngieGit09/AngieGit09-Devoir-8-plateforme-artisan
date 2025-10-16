@@ -1,15 +1,18 @@
+// routes/ficheArtisan.js — affiche la fiche et gère les messages de contact
 const express = require("express");
 const router = express.Router();
-const { Artisan, MessageContact } = require("../models"); // ⬅ importe tes modèles
+const { Artisan, MessageContact } = require("../models");
 
-// GET /api/fiche-artisan/:id  → fiche artisan
+// GET /api/fiche-artisan/:id  → retourne la fiche détaillée de l'artisan
 router.get("/:id", async (req, res) => {
   try {
     const id = Number(req.params.id);
+    // Validation simple de l'id
     if (!Number.isInteger(id) || id <= 0) {
       return res.status(400).json({ error: "Paramètre id invalide" });
     }
 
+    // Récupère l'artisan avec les champs utiles
     const artisan = await Artisan.findByPk(id, {
       attributes: [
         "id",
@@ -33,7 +36,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST /api/fiche-artisan/:id/contact  → enregistre un message
+// POST /api/fiche-artisan/:id/contact  → enregistre un message de contact
 router.post("/:id/contact", async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -41,15 +44,17 @@ router.post("/:id/contact", async (req, res) => {
       return res.status(400).json({ error: "Paramètre id invalide" });
     }
 
+    // Champs attendus (simple validation)
     const { nom, email, objet, message } = req.body || {};
     if (!nom || !email || !objet || !message) {
       return res.status(400).json({ error: "Champs requis manquants" });
     }
 
-    // (optionnel) s’assurer que l’artisan existe
+    // Vérifie que l'artisan existe
     const artisan = await Artisan.findByPk(id);
     if (!artisan) return res.status(404).json({ error: "Artisan introuvable" });
 
+    // Crée l'enregistrement messagecontact
     await MessageContact.create({
       nom,
       email,

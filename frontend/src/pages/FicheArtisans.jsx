@@ -4,8 +4,24 @@ import { useParams } from "react-router-dom";
 import api from "../services/api";
 import Stars from "../components/Stars";
 
+/**
+ * Page FicheArtisans
+ * - Récupère l'id depuis les params (useParams)
+ * - Charge la fiche artisan depuis l'API
+ * - Affiche les informations détaillées + formulaire de contact
+ *
+ * Remarques :
+ * - Le composant gère les états : loading, err, sending, sent, formErr
+ * - Le formulaire utilise FormData pour construire le payload envoyé au backend
+ * - Il y avait un bug sur le rendu pendant le chargement (if (loading) return; sans JSX).
+ *   J'ai corrigé en retournant le composant Seo + message de chargement pour conserver le SEO.
+ */
+
 export default function FicheArtisans() {
+  // Recuperation de l'id depuis l'URL
   const { id } = useParams();
+
+  // Etats locaux
   const [artisan, setArtisan] = useState(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
@@ -13,13 +29,18 @@ export default function FicheArtisans() {
   const [sent, setSent] = useState(false);
   const [formErr, setFormErr] = useState(null);
 
+  //Effet pour charger la fiche artisan à chaque chargement d'id
   useEffect(() => {
     async function load() {
       try {
         setLoading(true);
+        // Appel GET vers l'API pour récupérer la fiche
         const { data } = await api.get(`/api/fiche-artisan/${id}`);
+
+        // Met à jour l'état avec les données reçues
         setArtisan(data);
       } catch {
+        // Message général en cas d'échec du chargement
         setErr("Impossible de charger la fiche artisan.");
       } finally {
         setLoading(false);
@@ -28,15 +49,19 @@ export default function FicheArtisans() {
     load();
   }, [id]);
 
+  // Appel GET vers l'API pour récupérer la fiche
   async function onSubmit(e) {
     e.preventDefault();
     setFormErr(null);
     setSending(true);
     setSent(false);
 
+    // Construction du payload depuis le formulaire
     const payload = Object.fromEntries(new FormData(e.currentTarget).entries());
     try {
+      // POST vers l'endpoint contact de l'artisan
       await api.post(`/api/fiche-artisan/${id}/contact`, payload);
+      // Si tout OK, afficher message de succès et réinitialiser le formulaire
       setSent(true);
       e.currentTarget.reset();
     } catch {
@@ -46,23 +71,31 @@ export default function FicheArtisans() {
     }
   }
 
-  if (loading) return;
-  <>
-    <Seo
-      title="Fiche artisan"
-      description="Contactez l'artisan que vous souhaitez."
-    />
-    <main className="container py-5">Chargement…</main>;
-  </>;
-  if (err)
+  // --- RENDU pendant le chargement ---
+  if (loading) {
+    return (
+      <>
+        {/* Conserver les balises SEO même pendant le chargement */}
+        <Seo
+          title="Fiche artisan"
+          description="Contactez l'artisan que vous souhaitez."
+        />
+        <main className="container py-5">Chargement…</main>
+      </>
+    );
+  }
+
+  // --- RENDU en cas d'erreur générale ---
+  if (err) {
     return (
       <main className="container py-5">
         <div className="alert alert-danger">{err}</div>
       </main>
     );
-  if (!artisan) return null;
+  }
 
-  const imageUrl = artisan.image || "/assets/fallbacks/default.jpg";
+  // Si aucune fiche (sécurité) on ne rend rien
+  if (!artisan) return null;
 
   return (
     <main className="container py-5">

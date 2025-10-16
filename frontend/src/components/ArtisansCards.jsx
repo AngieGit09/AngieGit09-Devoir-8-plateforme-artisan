@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
  *  - localisation : string
  */
 
-//Card artisant sur la page fiche artisant
+// Composant principal : affiche une carte résumée d'un artisan
 export default function ArtisansCards({
   id,
   nom,
@@ -19,8 +19,12 @@ export default function ArtisansCards({
   specialite,
   localisation,
 }) {
+  // Calcul simple pour afficher des étoiles :
+  // full = nombre d'étoiles pleines (partie entière)
+  // half = si la partie décimale >= 0.5
   const full = Math.floor(note);
   const half = note - full >= 0.5;
+  // Génère une chaîne de 5 caractères représentant les étoiles
   const stars = Array.from({ length: 5 }, (_, i) => {
     if (i < full) return "★";
     if (i === full && half) return "☆";
@@ -28,6 +32,7 @@ export default function ArtisansCards({
   }).join("");
 
   return (
+    // article pour signifier une unité sémantique
     <article className="artisan-card" aria-label={`Artisan ${nom}`}>
       <div className="artisan-card__content">
         <h3 className="artisan-card__name">{nom}</h3>

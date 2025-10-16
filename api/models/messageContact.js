@@ -1,4 +1,4 @@
-//Formulaire
+// models/messageContact.js — table pour stocker les messages envoyés depuis le formulaire
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define(
     "MessageContact",

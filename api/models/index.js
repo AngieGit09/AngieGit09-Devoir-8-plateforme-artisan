@@ -1,3 +1,4 @@
+// models/index.js — initialise Sequelize et les modèles, crée les associations
 const { Sequelize, DataTypes } = require("sequelize");
 require("dotenv").config();
 const path = require("path");
@@ -11,10 +12,10 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     dialect: process.env.DB_DIALECT,
     port: process.env.DB_PORT || 3306,
-    logging: false,
+    logging: false, // met à true pour debug SQL
     define: {
-      freezeTableName: true,
-      timestamps: false,
+      freezeTableName: true, // empêche Sequelize de pluraliser les noms
+      timestamps: false, // si les tables n'ont pas createdAt/updatedAt
     },
   }
 );
@@ -25,7 +26,7 @@ const Categorie = require("./categorie")(sequelize, DataTypes);
 const Note = require("./note")(sequelize, DataTypes);
 const MessageContact = require("./messageContact")(sequelize, DataTypes); // <-- vérifie le nom exact du fichier
 
-// --- Associations
+// --- Associations entre modèles
 Categorie.hasMany(Artisan, { foreignKey: "categorie_id" });
 Artisan.belongsTo(Categorie, { foreignKey: "categorie_id" });
 
@@ -38,7 +39,7 @@ Artisan.hasMany(MessageContact, {
 });
 MessageContact.belongsTo(Artisan, { foreignKey: "artisan_id" });
 
-//Vérification de connexion
+// Vérification de connexion à MySQL
 async function connectDB() {
   try {
     await sequelize.authenticate();

@@ -1,3 +1,4 @@
+// controllers/listeArtisanController.js
 const { Artisan, Categorie } = require("../models");
 
 exports.getAll = async (req, res) => {

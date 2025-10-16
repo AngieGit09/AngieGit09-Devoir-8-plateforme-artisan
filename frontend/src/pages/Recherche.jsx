@@ -4,6 +4,7 @@ import Seo from "../components/Seo";
 function Recherche() {
   return (
     <>
+      {/* Informations SEO pour la page recherche */}
       <Seo
         title="Rechercher un artisan"
         description="Rechercher votre artisan depuis la barre de recherche."
@@ -11,7 +12,9 @@ function Recherche() {
       <main className="container py-5 text-center d-flex flex-column justify-content-center">
         <div className="row justify-content-center">
           <div className="col-md-8">
-            <h1 className="mb-4 fw-medium">Rechercher</h1>
+            <h1 className="text-uppercase text-center fw-medium mb-4">
+              Rechercher
+            </h1>
 
             {/* Champ de recherche avec icône intégrée */}
             <div className="position-relative">

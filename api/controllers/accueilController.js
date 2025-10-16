@@ -1,3 +1,4 @@
+// controllers/accueilController.js
 const { Artisan } = require("../models");
 
 exports.getAccueil = async (req, res) => {

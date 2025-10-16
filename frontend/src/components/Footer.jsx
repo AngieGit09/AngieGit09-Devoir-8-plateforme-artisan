@@ -1,10 +1,17 @@
 import { Link } from "react-router-dom";
 
+/**
+ * Footer global du site
+ * Contient logo, adresse et liens vers pages légales / contact.
+ * Utilise des balises sémantiques (footer, address) pour l'accessibilité et le SEO.
+ */
+
 export default function Footer() {
   return (
     <footer className="mt-5 bg-primary text-white py-4">
       <div className="container">
         <div className="row gy-3">
+          {/* Logo/brand */}
           <Link className="navbar-brand text-white" to="/">
             <img
               src="/assets/logo.png"
@@ -24,6 +31,7 @@ export default function Footer() {
               +33 (0)4 26 73 40 00
             </address>
 
+            {/* Séparateur visible sur mobile */}
             <hr className="d-block d-md-none mx-auto my-5 border-2 border-white" />
           </div>
 

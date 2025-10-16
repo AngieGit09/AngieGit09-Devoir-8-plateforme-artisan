@@ -1,22 +1,32 @@
+// Import des outils de navigation et des hooks React
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import Seo from "../components/Seo";
 
+// Composant du menu principal
 export default function Menu() {
+  // Hook de navigation pour rediriger vers une autre page
   const navigate = useNavigate();
+
+  // État local pour stocker le texte de recherche
   const [search, setSearch] = useState("");
+
+  // Permet de lire les paramètres actuels de l’URL
   const [params] = useSearchParams();
 
+  // Fonction pour naviguer vers la liste d’artisans en fonction de la catégorie
   function goTo(cat) {
-    // Redirige vers la liste + conserve la recherche si saisie
+    // Crée une nouvelle instance d’URLSearchParams pour gérer les paramètres
     const q = new URLSearchParams();
     q.set("cat", String(cat));
     if (search.trim()) q.set("search", search.trim());
+    // Redirige vers la page "liste-artisans"
     navigate(`/liste-artisans?${q.toString()}`);
   }
 
   return (
     <>
+      {/* Informations SEO pour la page menu ouvert (mobile et tablet) */}
       <Seo
         title="Menu"
         description="Selectionnez la categorie parmi bâtiment, services, fabrication ou alimentation que vous souhaitez."

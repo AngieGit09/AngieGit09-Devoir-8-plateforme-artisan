@@ -1,3 +1,4 @@
+// controllers/categoriesController.js
 exports.getAll = async (req, res) => {
   try {
     const cats = await Categorie.findAll({ order: [["nom", "ASC"]] });

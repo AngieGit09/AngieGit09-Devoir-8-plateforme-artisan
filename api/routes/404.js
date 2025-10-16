@@ -1,3 +1,4 @@
+// routes/404.js — renvoie une réponse JSON 404 pour routes inconnues
 const express = require("express");
 const router = express.Router();
 

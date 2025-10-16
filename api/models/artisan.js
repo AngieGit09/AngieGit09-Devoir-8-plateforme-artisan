@@ -1,3 +1,4 @@
+// models/artisan.js — définition du modèle Artisan
 module.exports = (sequelize, DataTypes) =>
   sequelize.define(
     "Artisan",

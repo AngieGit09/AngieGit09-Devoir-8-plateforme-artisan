@@ -22,7 +22,7 @@ export default function NotFound() {
         <h1 className="text-uppercase fw-medium mb-4">Page non trouvée</h1>
 
         {/* Bouton retour */}
-        <div className="text-center">
+        <div className="text-center text-white">
           <Link
             to="/"
             className="btn btn-primary notfound-btn"

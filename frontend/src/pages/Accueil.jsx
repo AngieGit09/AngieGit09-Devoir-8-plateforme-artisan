@@ -1,5 +1,5 @@
 import Seo from "../components/Seo";
-import ArtisanCard from "../components/ArtisanCard";
+import ArtisanCard from "../components/CardArtisanDuMois";
 
 export default function Accueil() {
   const artisansDuMois = [

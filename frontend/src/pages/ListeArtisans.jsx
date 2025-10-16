@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import api from "../services/api";
-import ArtisanCard from "../components/ArtisanCard";
+import ArtisanCard from "../components/CardArtisanDuMois";
 import Seo from "../components/Seo";
 
 const CAT_LABELS = {

@@ -1,0 +1,5 @@
+/* /index.html 200
+
+# Règle de redirection pour React (Single Page Application)
+# Cette règle indique à Netlify de rediriger toutes les routes vers index.html
+# afin que la navigation côté client (React Router) fonctionne correctement.

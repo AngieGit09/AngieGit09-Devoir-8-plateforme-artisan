@@ -9,7 +9,7 @@ const { sequelize, connectDB } = require("./models");
 // Origines autorisées côté front
 const allowedOrigins = [
   "http://localhost:3000", // dev local (React)
-  "https://trouve-ton-artisan.netlify.app", // production front (Netlify)
+  "https://plateforme-artisan-api.onrender.com", // production front (Netlify)
 ];
 
 // Configuration CORS : on autorise explicitement les domaines listés

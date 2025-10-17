@@ -1,6 +1,7 @@
 {
   "name": "api",
   "version": "1.0.0",
+  
   "description": "API de la plateforme artisans (backend Node.js / Express / Sequelize)",
   "main": "app.js",
   "scripts": {

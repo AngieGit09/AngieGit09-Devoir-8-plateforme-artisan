@@ -1,5 +1,9 @@
+# Configuration Netlify
+# Ce fichier indique à Netlify comment construire et publier le site
+
 [build]
 base = "frontend"
+# Commande à exécuter pour construire le projet React
 command = "npm run build"
 publish = "build"
 

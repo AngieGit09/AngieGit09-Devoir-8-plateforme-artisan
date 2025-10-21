@@ -2,62 +2,61 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const { sequelize, connectDB } = require("./models");
+const { connectDB } = require("./models");
 
-// Autoriser le bon frontend Netlify :
+// URLs autorisées (frontend)
 const allowedOrigins = [
-  "http://localhost:3000", // dev local
-  "https://plateforme-artisant.netlify.app",
+  "http://localhost:3000", // développement
+  "https://plateforme-artisan.netlify.app",
 ];
 
-// CORS simplifié (évite plantage)
+// Options CORS
 const corsOptions = {
   origin: function (origin, cb) {
-    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    // Autorise si pas d'origine (Postman) ou origine dans la liste
+    if (!origin || allowedOrigins.includes(origin)) {
+      return cb(null, true);
+    }
     return cb(new Error("Not allowed by CORS"), false);
   },
-  methods: "GET,POST,PUT,DELETE,OPTIONS",
-  allowedHeaders: "Content-Type,Authorization,X-Requested-With",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-api-key"], // autorisation de x-api-key
 };
 
+// Middleware de validation de clé API (désactivé temporairement pour tests frontend)
 const checkApiKey = (req, res, next) => {
-  // ⚠ Pour les tests publics, on désactive TEMPORAIREMENT la clé API :
   return next();
 };
 
-// Routes
+// Import des routes backend
 const accueilRoutes = require("./routes/accueil");
 const listeArtisanRoutes = require("./routes/listeArtisan");
 const ficheArtisanRoutes = require("./routes/ficheArtisan");
 const notFoundRoutes = require("./routes/404");
 
 const app = express();
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(new Error("CORS not allowed"), false);
-    },
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "x-api-key"],
-  })
-);
+
+// Appliquer CORS à toutes les routes
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
+// JSON parser
 app.use(express.json());
 
+// Connexion BDD
 (async () => {
   await connectDB();
 })();
 
+// Route de test (ne doit pas demander de clé API)
 app.get("/healthz", (req, res) => res.json({ ok: true }));
 
-// Désactiver pour laisser passer les requêtes frontend
-// app.use("/api", checkApiKey);
+// Routes métiers
 app.use("/api/accueil", accueilRoutes);
 app.use("/api/liste-artisans", listeArtisanRoutes);
 app.use("/api/fiche-artisans", ficheArtisanRoutes);
 
+// 404 à la fin
 app.use(notFoundRoutes);
 
 module.exports = app;

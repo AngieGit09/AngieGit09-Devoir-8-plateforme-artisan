@@ -50,7 +50,7 @@ export default function ArtisansCards({
         <p className="artisan-card__city">{localisation}</p>
 
         <Link
-          to={`/fiche-artisan/${id}`}
+          to={`/fiche-artisans/${id}`}
           className="btn btn-primary artisan-card__cta"
           aria-label={`Voir la fiche de ${nom}`}
         >

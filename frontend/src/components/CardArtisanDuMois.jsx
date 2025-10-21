@@ -30,7 +30,7 @@ export default function FeaturedArtisanCard({
         </p>
         {/* Lien vers la fiche (petit bouton) */}
         <Link
-          to={`/fiche-artisan/${id}`}
+          to={`/fiche-artisans/${id}`}
           className="btn btn-primary btn-sm rounded-pill"
         >
           Voir la fiche

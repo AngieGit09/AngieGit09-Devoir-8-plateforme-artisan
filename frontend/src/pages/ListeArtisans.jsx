@@ -4,7 +4,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 
 // Import du client API configuré et des composants utilisés
 import api from "../services/api";
-import ArtisanCard from "../components/CardArtisanDuMois";
+import ArtisansCards from "../components/ArtisansCards";
 import Seo from "../components/Seo";
 
 // Dictionnaire qui relie les identifiants ou noms de catégories à leurs labels lisibles
@@ -21,67 +21,52 @@ const CAT_LABELS = {
 
 // Définition du composant principal
 export default function ListeArtisans() {
-  // Hook pour lire les paramètres de l’URL
   const [params] = useSearchParams();
-
-  // Hook pour naviguer vers une autre page
   const navigate = useNavigate();
 
-  // Récupération du paramètre "cat" depuis l’URL
+  // Lecture du paramètre d'URL `cat` (ex: ?cat=batiment)
   const cat = params.get("cat") || "";
 
-  // Utilisation de useMemo pour calculer le label de la catégorie uniquement quand "cat" change
   const label = useMemo(() => {
     if (!cat) return "Toutes catégories";
     return CAT_LABELS[cat] || cat;
   }, [cat]);
 
-  // États locaux pour stocker les données, le chargement et les erreurs
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState(null);
 
-  // useEffect : déclenché à chaque fois que "cat" change
   useEffect(() => {
-    // Variable pour éviter les erreurs si le composant est démonté avant la fin du chargement
     let cancel = false;
 
-    // Fonction asynchrone pour charger les artisans depuis l’API
     async function load() {
-      setLoading(true); // Activation du mode chargement
-      setErr(null); // Réinitialisation des erreurs
+      setLoading(true);
+      setErr(null);
       try {
-        // Requête GET vers /api/liste-artisan avec un paramètre de catégorie
-        const { data } = await api.get("/api/liste-artisan", {
-          params: { cat },
+        const { data } = await api.get("/api/liste-artisans", {
+          params: { cat }, // ?cat=batiment → côté backend tu pourras filtrer
         });
         if (!cancel) setData(Array.isArray(data) ? data : []);
       } catch {
-        // Afficher un message d’erreur si une erreur survient
         if (!cancel) setErr("Impossible de charger la liste.");
       } finally {
-        // Fin du chargement dans tous les cas
         if (!cancel) setLoading(false);
       }
     }
 
-    // Appel de la fonction de chargement
     load();
-
-    // Nettoyage : si le composant se démonte, on empêche la mise à jour de l’état
     return () => {
       cancel = true;
     };
-  }, [cat]); // Dépendance : relancer l’effet quand "cat" change
+  }, [cat]);
 
-  // Affichage du composant
   return (
     <>
-      {/* Informations SEO pour la page liste d'artisans */}
       <Seo
         title="Liste des artisans"
-        description="Trouvez votre artisan depuis la categorie que vous avez sélectionnez."
+        description="Trouvez votre artisan selon la catégorie sélectionnée."
       />
+
       <main className="container py-4">
         <h1 className="text-uppercase text-center fw-medium mb-4">
           Catégorie : {label}
@@ -97,13 +82,13 @@ export default function ListeArtisans() {
         <div className="row g-3">
           {data.map((a) => (
             <div className="col-12 col-md-6" key={a.id}>
-              <ArtisanCard
+              <ArtisansCards
                 id={a.id}
                 nom={a.nom}
                 note={Number(a.note_moyenne || 0)}
                 specialite={a.specialite}
                 localisation={a.localisation}
-                onClick={() => navigate(`/fiche-artisan/${a.id}`)}
+                onClick={() => navigate(`/fiche-artisans/${a.id}`)}
               />
             </div>
           ))}

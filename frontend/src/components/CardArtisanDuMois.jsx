@@ -2,12 +2,8 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 /**
- * Carte "artisans du mois" — mise en avant
- * Props : idem (id, nom, note, specialite, localisation)
- * Utilisée pour afficher un style plus compact / accentué (ex: card verte)
+ * Carte "artisan du mois" — affichage compact avec style Bootstrap
  */
-
-//artisan du mois
 export default function FeaturedArtisanCard({
   id,
   nom,
@@ -15,33 +11,33 @@ export default function FeaturedArtisanCard({
   specialite,
   localisation,
 }) {
-  const noteFmt = Number(note ?? 0).toFixed(1);
+  const noteFmt = Number(note || 0).toFixed(1);
 
   return (
-    <article
-      className="card text-center p-4 shadow-sm border-0 bg-success text-white rounded-4"
-      aria-label={`Artisan ${nom}`}
-    >
-      {/* Nom */}
-      <h3 className="card-title fw-bold">{nom}</h3>
+    <article className="card text-center p-4 shadow-sm bg-success text-white border-0 rounded-4">
+      <div className="card-body">
+        {/* Nom */}
+        <h3 className="card-title fw-bold">{nom}</h3>
 
-      {/* Note */}
-      <div className="my-2">
-        <span className="me-1">{Number(note).toFixed(1)}</span>
-        <span>⭐</span>
+        {/* Note : 4.5 / 5 ⭐ */}
+        <div className="my-2">
+          {noteFmt} / 5 <span className="text-warning">⭐</span>
+        </div>
+
+        {/* Spécialité */}
+        <p className="mb-1">{specialite}</p>
+
+        {/* Localisation */}
+        <p className="mb-3">{localisation}</p>
+
+        {/* Bouton vers fiche artisan */}
+        <Link
+          to={`/fiche-artisans/${id}`}
+          className="btn btn-primary text-uppercase fw-bold px-4 py-2 rounded-pill"
+        >
+          Voir le profil de l’artisan
+        </Link>
       </div>
-
-      {/* Spécialité + Localisation */}
-      <p className="mb-1">{specialite}</p>
-      <p className="mb-3">{localisation}</p>
-
-      {/* Bouton */}
-      <button
-        onClick={onClick}
-        className="btn btn-primary text-uppercase fw-bold px-4 py-2 rounded-pill"
-      >
-        Voir le profil de l’artisan
-      </button>
     </article>
   );
 }

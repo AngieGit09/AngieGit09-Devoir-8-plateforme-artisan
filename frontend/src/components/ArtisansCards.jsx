@@ -32,7 +32,7 @@ export default function FeaturedArtisanCard({
 
         {/* Bouton vers fiche artisan */}
         <Link
-          to={`/fiche-artisans/${id}`}
+          to={`/fiche-artisanss/${id}`}
           className="btn btn-primary text-uppercase fw-bold px-4 py-2 rounded-pill"
         >
           Voir le profil de l’artisan

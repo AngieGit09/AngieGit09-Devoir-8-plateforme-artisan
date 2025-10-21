@@ -31,7 +31,7 @@ export default function FeaturedArtisanCard({
 
         {/* Bouton voir la fiche */}
         <Link
-          to={`/fiche-artisans/${id}`} // ✅ Correction ici : ajout du "s"
+          to={`/fiche-artisanss/${id}`} // ✅ Correction ici : ajout du "s"
           className="btn btn-primary btn-sm rounded-pill"
         >
           Voir la fiche

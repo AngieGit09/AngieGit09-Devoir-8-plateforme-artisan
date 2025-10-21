@@ -88,7 +88,7 @@ export default function ListeArtisans() {
                 note={Number(a.note_moyenne || 0)}
                 specialite={a.specialite}
                 localisation={a.localisation}
-                onClick={() => navigate(`/fiche-artisans/${a.id}`)}
+                onClick={() => navigate(`/fiche-artisanss/${a.id}`)}
               />
             </div>
           ))}

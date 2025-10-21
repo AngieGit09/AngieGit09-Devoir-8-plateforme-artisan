@@ -30,7 +30,7 @@ export default function App() {
         <Route path="/menu" element={<Menu />} />
         <Route path="/recherche" element={<Recherche />} />
         <Route path="/liste-artisans/:categorie?" element={<ListeArtisans />} />
-        <Route path="/fiche-artisans/:id" element={<FicheArtisans />} />
+        <Route path="/fiche-artisanss/:id" element={<FicheArtisans />} />
         <Route path="/mentions-legales" element={<MentionsLegales />} />
         <Route path="/donnees-personnelles" element={<DonneesPersonnelles />} />
         <Route path="/accessibilite" element={<Accessibilite />} />

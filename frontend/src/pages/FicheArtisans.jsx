@@ -35,7 +35,7 @@ export default function FicheArtisans() {
       try {
         setLoading(true);
         // Appel GET vers l'API pour récupérer la fiche
-        const { data } = await api.get(`/api/fiche-artisan/${id}`);
+        const { data } = await api.get(`/api/fiche-artisans/${id}`);
 
         // Met à jour l'état avec les données reçues
         setArtisan(data);
@@ -60,7 +60,7 @@ export default function FicheArtisans() {
     const payload = Object.fromEntries(new FormData(e.currentTarget).entries());
     try {
       // POST vers l'endpoint contact de l'artisan
-      await api.post(`/api/fiche-artisan/${id}/contact`, payload);
+      await api.post(`/api/fiche-artisans/${id}/contact`, payload);
       // Si tout OK, afficher message de succès et réinitialiser le formulaire
       setSent(true);
       e.currentTarget.reset();

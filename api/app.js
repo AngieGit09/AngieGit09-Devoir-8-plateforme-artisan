@@ -32,7 +32,18 @@ const ficheArtisanRoutes = require("./routes/ficheArtisan");
 const notFoundRoutes = require("./routes/404");
 
 const app = express();
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("CORS not allowed"), false);
+    },
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "x-api-key"],
+  })
+);
 app.use(express.json());
 
 (async () => {

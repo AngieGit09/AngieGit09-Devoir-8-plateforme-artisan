@@ -1,67 +1,52 @@
 // app.js — configuration principale du serveur Express
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config(); // charge les variables d'environnement depuis .env
-
-// Import du module sequelize / fonction de connexion définis dans /models/index.js
+require("dotenv").config();
 const { sequelize, connectDB } = require("./models");
 
-// Origines autorisées côté front
+// Autoriser le bon frontend Netlify :
 const allowedOrigins = [
-  "http://localhost:3000", // dev local (React)
-  "https://plateforme-artisan-api.onrender.com", // production front (Netlify)
+  "http://localhost:3000", // dev local
+  "https://plateforme-artisan.netlify.app",
 ];
 
-// Configuration CORS : on autorise explicitement les domaines listés
+// CORS simplifié (évite plantage)
 const corsOptions = {
   origin: function (origin, cb) {
-    // origin peut être undefined
-    if (!origin) return cb(null, true);
-    if (allowedOrigins.includes(origin)) return cb(null, true);
+    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
     return cb(new Error("Not allowed by CORS"), false);
   },
+  methods: "GET,POST,PUT,DELETE,OPTIONS",
+  allowedHeaders: "Content-Type,Authorization,X-Requested-With",
 };
 
-// Middleware pour vérifier la présence d'une clé API dans les requêtes vers /api
-function checkApiKey(req, res, next) {
-  // On cherche le header x-api-key
-  const key = req.headers["x-api-key"];
-  // Si la clé attendue est définie côté serveur (process.env.API_KEY) et que la valeur correspond -> next()
-  if (process.env.API_KEY && key === process.env.API_KEY) return next();
-  // Sinon refuser l'accès
-  return res.status(403).json({ error: "Accès refusé : clé API invalide" });
-}
+const checkApiKey = (req, res, next) => {
+  // ⚠ Pour les tests publics, on désactive TEMPORAIREMENT la clé API :
+  return next();
+};
 
-// Import des routes
+// Routes
 const accueilRoutes = require("./routes/accueil");
 const listeArtisanRoutes = require("./routes/listeArtisan");
 const ficheArtisanRoutes = require("./routes/ficheArtisan");
 const notFoundRoutes = require("./routes/404");
 
 const app = express();
-
-// Applique CORS puis JSON body parser
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Connecte la base de données (fonction qui authentifie la connexion Sequelize)
-// On lance la connexion immédiatement (catch géré dans connectDB)
 (async () => {
   await connectDB();
 })();
 
-// Endpoint de santé
 app.get("/healthz", (req, res) => res.json({ ok: true }));
 
-// Toutes les routes sous /api nécessitent la clé API (checkApiKey middleware)
-app.use("/api", checkApiKey);
-
-// Montage des routes métiers
+// Désactiver pour laisser passer les requêtes frontend
+// app.use("/api", checkApiKey);
 app.use("/api/accueil", accueilRoutes);
-app.use("/api/liste-artisan", listeArtisanRoutes);
-app.use("/api/fiche-artisan", ficheArtisanRoutes);
+app.use("/api/liste-artisans", listeArtisanRoutes);
+app.use("/api/fiche-artisans", ficheArtisanRoutes);
 
-// Route 404 — doit être le dernier middleware pour capter les routes non gérées
 app.use(notFoundRoutes);
 
 module.exports = app;

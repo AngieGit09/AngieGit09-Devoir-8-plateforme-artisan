@@ -2,8 +2,9 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 /**
- * Carte "artisan du mois" — affichage compact avec style Bootstrap
+ * Carte "artisans du mois" — mise en avant
  */
+
 export default function FeaturedArtisanCard({
   id,
   nom,
@@ -11,31 +12,29 @@ export default function FeaturedArtisanCard({
   specialite,
   localisation,
 }) {
-  const noteFmt = Number(note || 0).toFixed(1);
+  // Formatage de la note
+  const noteFmt = Number(note ?? 0).toFixed(1);
 
   return (
-    <article className="card text-center p-4 shadow-sm bg-success text-white border-0 rounded-4">
+    <article className="artisan bg-success text-white card text-center p-3 h-100">
       <div className="card-body">
         {/* Nom */}
-        <h3 className="card-title fw-bold">{nom}</h3>
+        <h3 className="card-title h5 mb-2">{nom}</h3>
 
-        {/* Note : 4.5 / 5 ⭐ */}
-        <div className="my-2">
-          {noteFmt} / 5 <span className="text-warning">⭐</span>
-        </div>
+        {/* Note affichée avec étoile */}
+        <p className="mb-1">⭐ {noteFmt} / 5</p>
 
-        {/* Spécialité */}
-        <p className="mb-1">{specialite}</p>
+        {/* Spécialité + Localisation */}
+        <p className="text-white mb-3">
+          {specialite} — {localisation}
+        </p>
 
-        {/* Localisation */}
-        <p className="mb-3">{localisation}</p>
-
-        {/* Bouton vers fiche artisan */}
+        {/* Bouton voir la fiche */}
         <Link
-          to={`/fiche-artisans/${id}`}
-          className="btn btn-primary text-uppercase fw-bold px-4 py-2 rounded-pill"
+          to={`/fiche-artisans/${id}`} // ✅ Correction ici : ajout du "s"
+          className="btn btn-primary btn-sm rounded-pill"
         >
-          Voir le profil de l’artisan
+          Voir la fiche
         </Link>
       </div>
     </article>

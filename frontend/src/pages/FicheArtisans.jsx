@@ -108,7 +108,7 @@ export default function FicheArtisans() {
         {/* IMAGE */}
         <div className="col-12 col-lg-5 text-center">
           <img
-            src={imageUrl}
+            src={artisan.image}
             alt={artisan.nom}
             className="img-fluid rounded shadow-sm"
             style={{ objectFit: "cover", maxHeight: "300px" }}

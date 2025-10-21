@@ -1,68 +1,49 @@
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 /**
- * Carte artisan réutilisable
- * Props :
- *  - id           : number | string  (pour le lien vers la fiche)
- *  - nom          : string
- *  - note         : number (0 → 5, décimal OK)
- *  - specialite   : string
- *  - localisation : string
+ * Carte "artisan du mois" — affichage compact avec style Bootstrap
  */
-
-// Composant principal : affiche une carte résumée d'un artisan
-export default function ArtisansCards({
+export default function FeaturedArtisanCard({
   id,
   nom,
   note = 0,
   specialite,
   localisation,
 }) {
-  // Calcul simple pour afficher des étoiles :
-  // full = nombre d'étoiles pleines (partie entière)
-  // half = si la partie décimale >= 0.5
-  const full = Math.floor(note);
-  const half = note - full >= 0.5;
-  // Génère une chaîne de 5 caractères représentant les étoiles
-  const stars = Array.from({ length: 5 }, (_, i) => {
-    if (i < full) return "★";
-    if (i === full && half) return "☆";
-    return "☆";
-  }).join("");
+  const noteFmt = Number(note || 0).toFixed(1);
 
   return (
-    // article pour signifier une unité sémantique
-    <article className="artisan-card" aria-label={`Artisan ${nom}`}>
-      <div className="artisan-card__content">
-        <h3 className="artisan-card__name">{nom}</h3>
+    <article className="card text-center p-4 shadow-sm bg-success text-white border-0 rounded-4">
+      <div className="card-body">
+        {/* Nom */}
+        <h3 className="card-title fw-bold">{nom}</h3>
 
-        <div
-          className="artisan-card__rating"
-          aria-label={`Note ${note} sur 5`}
-          title={`Note ${note}/5`}
-        >
-          <span className="artisan-card__stars">{stars}</span>
-          <span className="artisan-card__value">{Number(note).toFixed(1)}</span>
+        {/* Note : 4.5 / 5 ⭐ */}
+        <div className="my-2">
+          {noteFmt} / 5 <span className="text-warning">⭐</span>
         </div>
 
-        <p className="artisan-card__spec">{specialite}</p>
-        <p className="artisan-card__city">{localisation}</p>
+        {/* Spécialité */}
+        <p className="mb-1">{specialite}</p>
 
+        {/* Localisation */}
+        <p className="mb-3">{localisation}</p>
+
+        {/* Bouton vers fiche artisan */}
         <Link
           to={`/fiche-artisans/${id}`}
-          className="btn btn-primary artisan-card__cta"
-          aria-label={`Voir la fiche de ${nom}`}
+          className="btn btn-primary text-uppercase fw-bold px-4 py-2 rounded-pill"
         >
-          Cliquer ici pour voir le profil de l’artisan
+          Voir le profil de l’artisan
         </Link>
       </div>
     </article>
   );
 }
 
-ArtisansCards.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+FeaturedArtisanCard.propTypes = {
+  id: PropTypes.number.isRequired,
   nom: PropTypes.string.isRequired,
   note: PropTypes.number,
   specialite: PropTypes.string.isRequired,

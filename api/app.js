@@ -7,7 +7,7 @@ const { sequelize, connectDB } = require("./models");
 // Autoriser le bon frontend Netlify :
 const allowedOrigins = [
   "http://localhost:3000", // dev local
-  "https://plateforme-artisan.netlify.app",
+  "https://plateforme-artisant.netlify.app",
 ];
 
 // CORS simplifié (évite plantage)

@@ -99,7 +99,7 @@ export default function FicheArtisans() {
 
   return (
     <main className="container py-5">
-      <h1 className="text-uppercase fw-medium mb-4">
+      <h1 className="text-uppercase text-center fw-medium mb-4">
         Bienvenue sur la page de votre artisan :{artisan.nom}
       </h1>
 

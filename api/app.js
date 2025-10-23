@@ -1,4 +1,3 @@
-// app.js — configuration principale du serveur Express
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -8,7 +7,7 @@ const { connectDB } = require("./models");
 const allowedOrigins = [
   "http://localhost:3000", // développement
   "https://plateforme-artisan.netlify.app",
-  "https://fantastic-syrniki-cb9cdb.netlify.app",
+  "https://fantastic-syrniki-cb9cdb.netlify.app", // nouveau site Netlify
 ];
 
 // Options CORS
@@ -21,10 +20,10 @@ const corsOptions = {
     return cb(new Error("Not allowed by CORS"), false);
   },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "x-api-key"], // autorisation de x-api-key
+  allowedHeaders: ["Content-Type", "Authorization", "x-api-key"],
 };
 
-// Middleware de validation de clé API (désactivé temporairement pour tests frontend)
+// Middleware de validation de clé API (désactivé pour les tests frontend)
 const checkApiKey = (req, res, next) => {
   return next();
 };
@@ -33,7 +32,6 @@ const checkApiKey = (req, res, next) => {
 const accueilRoutes = require("./routes/accueil");
 const listeArtisanRoutes = require("./routes/listeArtisan");
 const ficheArtisanRoutes = require("./routes/ficheArtisan");
-const notFoundRoutes = require("./routes/404");
 
 const app = express();
 
@@ -49,15 +47,17 @@ app.use(express.json());
   await connectDB();
 })();
 
-// Route de test (ne doit pas demander de clé API)
+// Route de test (pour vérifier le fonctionnement)
 app.get("/healthz", (req, res) => res.json({ ok: true }));
 
-// Routes métiers
+// Routes principales
 app.use("/api/accueil", accueilRoutes);
 app.use("/api/liste-artisans", listeArtisanRoutes);
 app.use("/api/fiche-artisans", ficheArtisanRoutes);
 
-// 404 à la fin
-app.use(notFoundRoutes);
+// Route 404 (à mettre à la fin)
+app.use((req, res) => {
+  res.status(404).json({ error: "Route non trouvée" });
+});
 
 module.exports = app;

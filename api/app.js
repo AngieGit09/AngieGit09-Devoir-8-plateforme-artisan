@@ -8,6 +8,7 @@ const { connectDB } = require("./models");
 const allowedOrigins = [
   "http://localhost:3000", // développement
   "https://plateforme-artisan.netlify.app",
+  "https://fantastic-syrniki-cb9cdb.netlify.app",
 ];
 
 // Options CORS

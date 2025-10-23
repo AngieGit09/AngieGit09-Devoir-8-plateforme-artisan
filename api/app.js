@@ -1,19 +1,19 @@
+// app.js — configuration principale du serveur Express
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const { connectDB } = require("./models");
 
-// URLs autorisées (frontend)
+// URLs autorisées côté frontend
 const allowedOrigins = [
-  "http://localhost:3000", // développement
+  "http://localhost:3000",
   "https://plateforme-artisan.netlify.app",
-  "https://fantastic-syrniki-cb9cdb.netlify.app", // nouveau site Netlify
+  "https://fantastic-syrniki-cb9cdb.netlify.app",
 ];
 
 // Options CORS
 const corsOptions = {
-  origin: function (origin, cb) {
-    // Autorise si pas d'origine (Postman) ou origine dans la liste
+  origin: (origin, cb) => {
     if (!origin || allowedOrigins.includes(origin)) {
       return cb(null, true);
     }
@@ -23,39 +23,32 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization", "x-api-key"],
 };
 
-// Middleware de validation de clé API (désactivé pour les tests frontend)
-const checkApiKey = (req, res, next) => {
-  return next();
-};
-
-// Import des routes backend
-const accueilRoutes = require("./routes/accueil");
-const listeArtisanRoutes = require("./routes/listeArtisan");
-const ficheArtisanRoutes = require("./routes/ficheArtisan");
-
 const app = express();
 
-// Appliquer CORS à toutes les routes
+// Appliquer CORS
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
 
-// JSON parser
+// Lecture JSON
 app.use(express.json());
 
-// Connexion BDD
+// Connexion base de données
 (async () => {
   await connectDB();
 })();
 
-// Route de test (pour vérifier le fonctionnement)
-app.get("/healthz", (req, res) => res.json({ ok: true }));
+// Routes
+const accueilRoutes = require("./routes/accueil");
+const listeArtisanRoutes = require("./routes/listeArtisan");
+const ficheArtisanRoutes = require("./routes/ficheArtisan");
 
-// Routes principales
 app.use("/api/accueil", accueilRoutes);
 app.use("/api/liste-artisans", listeArtisanRoutes);
 app.use("/api/fiche-artisans", ficheArtisanRoutes);
 
-// Route 404 (à mettre à la fin)
+// Route santé
+app.get("/healthz", (req, res) => res.json({ ok: true }));
+
+// Route 404 propre
 app.use((req, res) => {
   res.status(404).json({ error: "Route non trouvée" });
 });

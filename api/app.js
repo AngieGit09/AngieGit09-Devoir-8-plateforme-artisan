@@ -54,7 +54,7 @@ app.get("/healthz", (req, res) => res.json({ ok: true }));
 // Routes métiers
 app.use("/api/accueil", accueilRoutes);
 app.use("/api/liste-artisans", listeArtisanRoutes);
-app.use("/api/fiche-artisanss", ficheArtisanRoutes);
+app.use("/api/fiche-artisans", ficheArtisanRoutes);
 
 // 404 à la fin
 app.use(notFoundRoutes);
